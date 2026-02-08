@@ -5,7 +5,7 @@ export const Learning = () => {
     const [, setLocation] = useLocation();
 
     const modules = [
-        { title: 'Arduino', duration: '1h', level: 'Beginner', color: '#3b82f6', slug: 'arduino' },
+        { title: 'Arduino', duration: '', level: '', color: '#3b82f6', slug: 'arduino' },
         { title: 'Computer Vision', duration: '1h 20m', level: 'Intermediate', color: '#10b981' },
         { title: 'Kinematics & Control', duration: '2h', level: 'Advanced', color: '#f59e0b' },
         { title: 'Sensor Fusion', duration: '55m', level: 'Intermediate', color: '#8b5cf6' },

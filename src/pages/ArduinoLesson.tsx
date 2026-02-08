@@ -1,5 +1,18 @@
+import { Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { useGLTF, OrbitControls, Environment, ContactShadows } from '@react-three/drei';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
+
+const ArduinoModel = () => {
+    const { scene } = useGLTF('/arduino_uno_-_low_poly.glb');
+    return (
+        <group>
+            {/* Flipped 90 degrees on X to face the camera flat */}
+            <primitive object={scene} scale={0.5} rotation={[Math.PI / 2, 0, 0]} />
+        </group>
+    );
+};
 
 const ContentSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div style={{ marginBottom: '3rem' }}>
@@ -36,7 +49,7 @@ const PinItem = ({ name, details }: { name: string, details: string[] }) => (
                     );
                 }
                 return (
-                    <li key={i} style={{ fontSize: '0.9rem', color: '#94a3b8', marginBottom: '0.3rem', lineHeight: 1.5, display: 'flex', gap: '0.6rem', paddingLeft: '0.5rem' }}>
+                    <li key={i} style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.3rem', lineHeight: 1.5, display: 'flex', gap: '0.6rem', paddingLeft: '0.5rem' }}>
                         <div style={{ color: '#3b82f6' }}>•</div>
                         {d}
                     </li>
@@ -65,7 +78,7 @@ export const ArduinoLesson = () => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.8 }}
                 style={{
-                    width: '500px',
+                    width: '460px',
                     padding: '0',
                     zIndex: 10,
                     background: 'rgba(5,5,5,0.98)',
@@ -77,7 +90,7 @@ export const ArduinoLesson = () => {
                 }}
             >
                 {/* Header */}
-                <div style={{ padding: '3rem 3.5rem 2rem 3.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ padding: '3rem 3rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                     <button
                         onClick={() => setLocation('/learning')}
                         style={{
@@ -93,30 +106,22 @@ export const ArduinoLesson = () => {
                             letterSpacing: '0.1rem',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.5rem',
-                            transition: 'all 0.3s'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'rgba(59, 130, 246, 0.1)';
-                            e.currentTarget.style.borderColor = '#3b82f6';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'transparent';
-                            e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+                            gap: '0.5rem'
                         }}
                     >
                         ← BACK TO TRAINING
                     </button>
-                    <h5 style={{ color: '#3b82f6', marginBottom: '0.5rem', letterSpacing: '0.4rem', fontSize: '0.75rem', fontWeight: 700 }}>TECHNICAL DATASHEET</h5>
-                    <h1 style={{ fontSize: '3rem', marginBottom: '0.5rem', lineHeight: 1, fontWeight: 900, letterSpacing: '-0.05rem' }}>Arduino Uno</h1>
-                    <p style={{ color: '#444', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2rem' }}>REV 3.0 // HARDWARE REFERENCE</p>
+
+                    <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', lineHeight: 1, fontWeight: 900, letterSpacing: '-0.05rem' }}>Arduino Uno</h1>
+                    <a style={{ color: 'red' }} href="https://youtu.be/HIXnwFB902M?si=mnhflfL3KCJsSnXS">Arduino Uno Explanation video</a>
+
                 </div>
 
                 {/* Scrollable Content */}
                 <div style={{
                     flex: 1,
                     overflowY: 'auto',
-                    padding: '3rem 3.5rem',
+                    padding: '3rem 3rem',
                     scrollbarWidth: 'thin',
                     scrollbarColor: '#3b82f6 transparent'
                 }} className="custom-scroll">
@@ -192,7 +197,6 @@ export const ArduinoLesson = () => {
                             "Devices: OLED displays, RTC modules, advanced sensors"
                         ]} />
                         <PinItem name="SPI Interface" details={[
-                            "Pins: 10 – 13",
                             "10 → SS",
                             "11 → MOSI",
                             "12 → MISO",
@@ -215,23 +219,23 @@ export const ArduinoLesson = () => {
                             "Action: Immediate software restart"
                         ]} />
                     </ContentSection>
-
-                    <div style={{ height: '4rem' }}></div>
                 </div>
             </motion.div>
 
-            {/* Right Side: Sketchfab Embed */}
-            <div style={{ flex: 1, position: 'relative', background: '#000' }}>
-                <div style={{ width: '100%', height: '100%' }}>
-                    <iframe
-                        title="Arduino UNO"
-                        frameBorder="0"
-                        allowFullScreen
-                        allow="autoplay; fullscreen; xr-spatial-tracking"
-                        src="https://sketchfab.com/models/85e4a60ec0294e2c83fbafa6051a3681/embed?ui_theme=dark&ui_hint=0&autostart=1&ui_info=0&ui_stop=0&ui_watermark=0"
-                        style={{ width: '100%', height: '100%', border: 'none' }}
-                    ></iframe>
-                </div>
+            {/* Right Side: Local Interactive 3D Viewer */}
+            <div style={{ flex: 1, position: 'relative', background: '#050505' }}>
+                <Canvas camera={{ position: [0, 0, 100], fov: 35 }}>
+                    <ambientLight intensity={1} />
+                    <pointLight position={[20, 20, 20]} intensity={2} />
+                    <spotLight position={[-20, 50, 20]} angle={0.4} penumbra={1} intensity={3} color="#3b82f6" />
+
+                    <Suspense fallback={null}>
+                        <ArduinoModel />
+                        <ContactShadows position={[0, -1, 0]} opacity={0.6} scale={100} blur={2.5} far={40} />
+                        <Environment preset="city" />
+                    </Suspense>
+                    <OrbitControls makeDefault enablePan={true} maxDistance={250} minDistance={10} />
+                </Canvas>
 
                 {/* HUD Elements */}
                 <div style={{
@@ -248,18 +252,16 @@ export const ArduinoLesson = () => {
                     border: '1px solid rgba(59, 130, 246, 0.2)',
                     boxShadow: '0 0 30px rgba(59, 130, 246, 0.1)'
                 }}>
-                    <p style={{ fontSize: '0.8rem', color: '#3b82f6', fontWeight: 800, letterSpacing: '0.2rem', margin: 0 }}>VIRTUAL PROTOTYPE // UNO_R3</p>
-                    <p style={{ fontSize: '0.65rem', color: '#666', margin: '0.2rem 0 0 0', fontWeight: 700 }}>QUANTUM RENDER ENGINE ENABLED</p>
+                    <p style={{ fontSize: '0.8rem', color: '#3b82f6', fontWeight: 800, letterSpacing: '0.2rem', margin: 0 }}>VIRTUAL PROTOTYPE // ARDUINO-UNO</p>
+                    <p style={{ fontSize: '0.65rem', color: '#666', margin: '0.2rem 0 0 0', fontWeight: 700 }}>HARDWARE ARCHITECTURE VIEW</p>
                 </div>
 
                 <div style={{ position: 'absolute', bottom: '2.5rem', right: '2.5rem', pointerEvents: 'none', zIndex: 10 }}>
                     <div className="glass-panel" style={{ padding: '1rem 2rem', fontSize: '0.75rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '1.5rem', background: 'rgba(5,5,5,0.8)', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div className="status-blink" style={{ width: '10px', height: '10px', background: '#3b82f6', borderRadius: '50%', boxShadow: '0 0 10px #3b82f6' }}></div>
-                            <span style={{ fontWeight: 800, letterSpacing: '0.1rem' }}>SYSTEM ONLINE</span>
+
                         </div>
-                        <div style={{ width: '1px', height: '15px', background: 'rgba(255,255,255,0.1)' }}></div>
-                        <span style={{ color: '#94a3b8', fontWeight: 600 }}>LATENCY: 12ms</span>
                     </div>
                 </div>
             </div>
