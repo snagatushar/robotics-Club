@@ -4,42 +4,57 @@ import { ScrollControls, Scroll, useScroll, Float, Environment, Grid } from '@re
 import { Robot } from './Robot';
 import { Overlay } from '../dom/Overlay';
 import * as THREE from 'three';
-import { damp3 } from 'maath/easing';
+import { damp3, dampE } from 'maath/easing';
 
 const SceneContent = () => {
     const scroll = useScroll();
     const robotGroup = useRef<THREE.Group>(null!);
 
     useFrame((state, delta) => {
-        // Safe movement calculations
-        const r1 = scroll.range(0, 1 / 4);
-        const r2 = scroll.range(1 / 4, 1 / 4);
+        // Safe access to scroll offset
+        const offset = scroll?.offset || 0;
 
-        // Dynamic Camera Position
+        // Define keyframes for camera
         const targetPos = new THREE.Vector3(0, 0, 5);
+        let targetRotY = 0; // Default: facing forward
 
-        // Page 1: Shift right to let text be left
-        if (scroll.visible(0, 1 / 2)) {
-            targetPos.set(r1 * 2, 0, 5 + r1 * 2);
+        const P = 1 / 4; // Page fraction
+
+        // Page 1: Home (0 -> 0.25)
+        // Shift Robot slightly right, look left
+        if (scroll.visible(0, P)) {
+            targetPos.set(1.5, 0, 4.5);
+            targetRotY = -0.3;
         }
-        // Page 2: Shift left
-        if (scroll.visible(1 / 3, 1 / 2)) {
-            targetPos.set(2 - r2 * 4, r2, 6);
+
+        // Page 2: About (0.25 -> 0.5)
+        // Shift Robot left, look right
+        if (scroll.visible(P, P)) {
+            targetPos.set(-1.8, 0, 5);
+            targetRotY = 0.5;
         }
 
-        // Smooth movement
-        damp3(state.camera.position, [
-            0 + Math.sin(scroll.offset * Math.PI * 2) * 2,
-            0 + scroll.offset * 2,
-            5 + scroll.offset * 5
-        ], 0.5, delta);
+        // Page 3: Projects (0.5 -> 0.75)
+        // Center focus
+        if (scroll.visible(2 * P, P)) {
+            targetPos.set(0, 0, 6);
+            targetRotY = 0;
+        }
 
-        state.camera.lookAt(0, 0, 0);
+        // Page 4: Contact (0.75 -> 1.0)
+        // Close up
+        if (scroll.visible(3 * P, P)) {
+            targetPos.set(0, 0, 5.5);
+            targetRotY = 0;
+        }
 
-        // Robot Animation
+        // Smooth camera movement
+        damp3(state.camera.position, targetPos, 0.6, delta);
+        state.camera.lookAt(0, 0.5, 0);
+
+        // Smooth Robot Rotation
         if (robotGroup.current) {
-            robotGroup.current.rotation.y = Math.PI * 2 * scroll.offset;
-            robotGroup.current.position.y = -1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+            dampE(robotGroup.current.rotation, [0, targetRotY, 0], 0.6, delta);
         }
     });
 
@@ -47,43 +62,44 @@ const SceneContent = () => {
         <>
             <color attach="background" args={['#050505']} />
 
-            {/* Cinematic Lighting */}
-            <ambientLight intensity={0.5} />
-            <spotLight position={[5, 10, 5]} intensity={2} angle={0.5} penumbra={1} castShadow color="#ffffff" />
-            <pointLight position={[-10, 0, -10]} intensity={2} color="#7000ff" />
+            {/* Performance Lighting: No Shadows, Simple Ambient + Directional */}
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[-5, 5, 5]} intensity={2} color="#ffffff" />
+            <directionalLight position={[5, 5, -5]} intensity={1} color="#3b82f6" />
 
-            {/* Environment for Reflections (Blurry city gives nice metallic reflections) */}
-            <Environment preset="city" blur={1} />
+            {/* Environment: No Blur (Expensive) */}
+            <Environment preset="studio" blur={0} />
 
-            {/* Floor Grid - Adds depth */}
+            {/* Simplified Grid */}
             <Grid
                 position={[0, -2, 0]}
-                args={[20, 20]}
+                args={[40, 40]}
                 cellColor="#222"
-                sectionColor="#00f3ff"
-                fadeDistance={15}
+                sectionColor="#333"
+                fadeDistance={25}
                 fadeStrength={1}
             />
 
-            {/* 3D Elements */}
-            <group ref={robotGroup} position={[0, -1, 0]}>
-                <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
-                    <Robot active={scroll.offset > 0.01} scale={1.2} />
+            {/* Robot */}
+            <group ref={robotGroup} position={[0, -2, 0]}>
+                <Float speed={2} rotationIntensity={0.1} floatIntensity={0.2} floatingRange={[-0.1, 0.1]}>
+                    <Robot active={true} scale={1.8} />
                 </Float>
             </group>
-
-            {/* ContactShadows removed for stability */}
         </>
     );
 }
 
 export const Experience = () => {
     return (
-        <Canvas shadows camera={{ position: [0, 0, 5], fov: 40 }}>
-            {/* Standard sRGBEncoding is default in R3F v8 but ensuring toneMapping is good */}
-            <ScrollControls pages={5} damping={0.2}>
+        // Optimizations:
+        // 1. dpr limited to 1.5 (Avoids 4K rendering on retina/4k screens which kills FPS)
+        // 2. No shadows prop = WebGL renderer doesn't allocate shadow maps
+        // 3. performance prop for automatic regression (Drei)
+        <Canvas dpr={[1, 1.5]} performance={{ min: 0.5 }} camera={{ position: [0, 0, 5], fov: 35 }}>
+            <ScrollControls pages={4} damping={0.2}>
                 <SceneContent />
-                <Scroll html style={{ width: '100%' }}>
+                <Scroll html style={{ width: '100%', height: '100%' }}>
                     <Overlay />
                 </Scroll>
             </ScrollControls>

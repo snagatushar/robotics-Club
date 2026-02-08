@@ -1,78 +1,110 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useState } from 'react';
+import { useLocation } from 'wouter';
 
 const navItems = [
-    'Home',
-    'About',
-    'Mission & Vision',
-    'Projects',
-    'Learning',
-    'Events',
-    'Contact',
+    { label: 'Home', href: '#home' },
+    { label: 'About', href: '#about' },
+    { label: 'Projects', href: '#projects' },
+    { label: 'Learning', href: '/learning' },
 ];
 
 export const Navbar = () => {
-    const { scrollY } = useScroll();
-    const bgOpacity = useTransform(scrollY, [0, 100], [0, 0.8]);
-    const backdropBlur = useTransform(scrollY, [0, 100], ['blur(0px)', 'blur(10px)']);
-    const borderColor = useTransform(scrollY, [0, 100], ['rgba(255,255,255,0)', 'rgba(255,255,255,0.1)']);
+    // 1. Get the `setLocation` function from wouter
+    const [, setLocation] = useLocation();
 
     return (
-        <motion.nav
+        <nav
             style={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 width: '100%',
-                padding: '20px 40px',
+                zIndex: 1000, // Reduced from 100 because App.tsx might set 100 for Canvas
+                padding: '1.5rem 0',
+                display: 'flex',
+                justifyContent: 'center',
+                pointerEvents: 'none',
+            }}
+        >
+            <div style={{
+                width: '90%',
+                maxWidth: '1200px',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                zIndex: 1000,
-                backgroundColor: useTransform(bgOpacity, (o) => `rgba(5, 5, 5, ${o})`),
-                backdropFilter: backdropBlur,
-                borderBottom: useTransform(borderColor, (c) => `1px solid ${c}`),
-            }}
-        >
-            <div style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.05em' }}>
-                <span style={{ color: 'var(--color-primary)' }}>ROBO</span>LAB
+                pointerEvents: 'auto',
+            }}>
+                {/* Logo */}
+                <a href="/" style={{ fontSize: '1.5rem', fontWeight: 800, textDecoration: 'none', color: '#fff' }}>
+                    ROBO<span className="text-accent">LAB</span>
+                </a>
+
+                {/* Nav Links - Glass Pill */}
+                <div className="glass-panel" style={{
+                    padding: '0.75rem 2rem',
+                    borderRadius: '2rem',
+                    display: 'flex',
+                    gap: '2rem',
+                    alignItems: 'center',
+                }}>
+                    {navItems.map((item) => (
+                        <a
+                            key={item.label}
+                            href={item.href}
+                            style={{
+                                fontSize: '0.9rem',
+                                fontWeight: 500,
+                                color: '#e2e8f0',
+                                textDecoration: 'none',
+                                transition: 'color 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#fff'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#e2e8f0'}
+                            onClick={(e) => {
+                                if (item.href.startsWith('/')) {
+                                    e.preventDefault();
+                                    setLocation(item.href);
+                                }
+                            }}
+                        >
+                            {item.label}
+                        </a>
+                    ))}
+                </div>
+
+                {/* Right Action */}
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <button
+                        onClick={() => setLocation('/login')}
+                        style={{
+                            padding: '0.6rem 1.2rem',
+                            background: 'transparent',
+                            color: '#fff',
+                            borderRadius: '2rem',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Login
+                    </button>
+                    <button
+                        onClick={() => setLocation('/signup')}
+                        style={{
+                            padding: '0.6rem 1.2rem',
+                            background: '#fff',
+                            color: '#000',
+                            borderRadius: '2rem',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            border: 'none',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Sign Up
+                    </button>
+                </div>
             </div>
-
-            <ul style={{ display: 'flex', gap: '32px', listStyle: 'none' }}>
-                {navItems.map((item) => (
-                    <NavItem key={item} text={item} />
-                ))}
-            </ul>
-        </motion.nav>
-    );
-};
-
-const NavItem = ({ text }: { text: string }) => {
-    const [hover, setHover] = useState(false);
-
-    return (
-        <motion.li
-            onHoverStart={() => setHover(true)}
-            onHoverEnd={() => setHover(false)}
-            style={{ position: 'relative', cursor: 'pointer', opacity: 0.8 }}
-            whileHover={{ opacity: 1, scale: 1.05 }}
-        >
-            {text}
-            {hover && (
-                <motion.div
-                    layoutId="underline"
-                    style={{
-                        position: 'absolute',
-                        bottom: -4,
-                        left: 0,
-                        right: 0,
-                        height: 2,
-                        background: 'var(--color-primary)',
-                        boxShadow: '0 0 10px var(--color-primary)',
-                    }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                />
-            )}
-        </motion.li>
+        </nav>
     );
 };
