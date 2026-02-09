@@ -23,6 +23,15 @@ body {
   overflow: hidden;
   /* Canvas handles scroll */
   -webkit-font-smoothing: antialiased;
+  cursor: none;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  cursor: none !important;
 }
 
 h1,

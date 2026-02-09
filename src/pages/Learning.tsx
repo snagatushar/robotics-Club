@@ -4,13 +4,21 @@ import { useLocation } from 'wouter';
 export const Learning = () => {
     const [, setLocation] = useLocation();
 
-    const modules = [
+    interface Module {
+        title: string;
+        duration: string;
+        level: string;
+        color: string;
+        slug?: string;
+    }
+
+    const modules: Module[] = [
         { title: 'Arduino', duration: '', level: '', color: '#3b82f6', slug: 'arduino' },
-        { title: 'Computer Vision', duration: '1h 20m', level: 'Intermediate', color: '#10b981' },
-        { title: 'Kinematics & Control', duration: '2h', level: 'Advanced', color: '#f59e0b' },
-        { title: 'Sensor Fusion', duration: '55m', level: 'Intermediate', color: '#8b5cf6' },
-        { title: 'Reinforcement Learning', duration: '1h 30m', level: 'Advanced', color: '#ef4444' },
-        { title: 'Ethics in AI', duration: '30m', level: 'Beginner', color: '#ec4899' },
+        { title: 'ESP32', duration: '', level: '', color: '#10b981', slug: 'esp32' },
+        { title: 'Raspberry Pi 5', duration: '', level: '', color: '#f59e0b', slug: 'raspberry-pi-5' },
+        { title: 'ServoMotor', duration: '', level: '', color: '#8b5cf6', slug: 'servo-motor' },
+        { title: 'Reinforcement Learning', duration: '', level: '', color: '#ef4444' },
+        { title: 'Ethics in AI', duration: '', level: '', color: '#ec4899' },
     ];
 
     return (

@@ -1,10 +1,10 @@
-import { useRef } from 'react';
+
 import { useLocation } from 'wouter';
 
 export const Login = () => {
-    const [location, setLocation] = useLocation();
+    const [, setLocation] = useLocation();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Mock success, navigate home
         setLocation('/');

@@ -1,7 +1,6 @@
-import { useRef } from 'react';
 import { motion } from 'framer-motion';
 
-const Section = ({ children, style, id, ...props }: any) => {
+const Section = ({ children, style, id, innerStyle, ...props }: any) => {
     return (
         <section
             id={id}
@@ -16,7 +15,7 @@ const Section = ({ children, style, id, ...props }: any) => {
             }}
             {...props}
         >
-            <div style={{ maxWidth: '1200px', width: '100%', margin: '0 auto', pointerEvents: 'auto' }}>
+            <div style={{ maxWidth: '1200px', width: '100%', margin: '0 auto', pointerEvents: 'auto', ...innerStyle }}>
                 {children}
             </div>
         </section>
@@ -28,7 +27,7 @@ export const Overlay = () => {
         <div style={{ width: '100%', pointerEvents: 'none' }}>
 
             {/* HERO - Subtle Fade */}
-            <Section id="home" style={{ justifyContent: 'flex-start' }}>
+            <Section id="home" style={{ justifyContent: 'flex-start' }} innerStyle={{ margin: '0' }}>
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}

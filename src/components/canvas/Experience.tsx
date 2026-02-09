@@ -11,8 +11,7 @@ const SceneContent = () => {
     const robotGroup = useRef<THREE.Group>(null!);
 
     useFrame((state, delta) => {
-        // Safe access to scroll offset
-        const offset = scroll?.offset || 0;
+
 
         // Define keyframes for camera
         const targetPos = new THREE.Vector3(0, 0, 5);
@@ -83,7 +82,7 @@ const SceneContent = () => {
             {/* Robot */}
             <group ref={robotGroup} position={[0, -2, 0]}>
                 <Float speed={2} rotationIntensity={0.1} floatIntensity={0.2} floatingRange={[-0.1, 0.1]}>
-                    <Robot active={true} scale={1.8} />
+                    <Robot scale={1.8} />
                 </Float>
             </group>
         </>

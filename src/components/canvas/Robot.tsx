@@ -1,12 +1,12 @@
 import { useRef, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
+
 import { useGLTF, useAnimations } from '@react-three/drei';
-import { Group, AnimationAction } from 'three';
+import { Group } from 'three';
 
 // Preload the model
 useGLTF.preload('/robot_a.l.e.x.glb');
 
-export const Robot = ({ active = false, ...props }: { active?: boolean } & JSX.IntrinsicElements['group']) => {
+export const Robot = (props: React.ComponentProps<'group'>) => {
     const group = useRef<Group>(null!);
     // Load the GLB model
     // The path should be relative to the public folder
@@ -28,13 +28,7 @@ export const Robot = ({ active = false, ...props }: { active?: boolean } & JSX.I
         }
     }, [actions]);
 
-    useFrame((state) => {
-        // Simple idle float if no animations, or just add subtle motion
-        if (group.current) {
-            // Optional: Add subtle breathing scale or position if desired
-            // group.current.position.y = Math.sin(state.clock.elapsedTime) * 0.05;
-        }
-    });
+
 
     return (
         <group ref={group} {...props} dispose={null}>

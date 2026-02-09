@@ -7,16 +7,24 @@ import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { Learning } from './pages/Learning';
 import { ArduinoLesson } from './pages/ArduinoLesson';
+import { ESPLesson } from './pages/ESPLesson';
+import { RaspberryPiLesson } from './pages/RaspberryPiLesson';
+import { ServoMotorLesson } from './pages/ServoMotorLesson';
+import { Cursor } from './components/dom/Cursor';
 import './App.css';
 
 function App() {
   return (
     <div className="app-container">
+      <Cursor />
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/learning" component={Learning} />
         <Route path="/learning/arduino" component={ArduinoLesson} />
+        <Route path="/learning/esp32" component={ESPLesson} />
+        <Route path="/learning/raspberry-pi-5" component={RaspberryPiLesson} />
+        <Route path="/learning/servo-motor" component={ServoMotorLesson} />
         <Route path="/">
           {/* Home / Experience Route */}
           <Navbar />

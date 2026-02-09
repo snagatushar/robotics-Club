@@ -1,12 +1,12 @@
 import { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF, useAnimations, Float } from '@react-three/drei';
+import { useGLTF, useAnimations } from '@react-three/drei';
 import { Group } from 'three';
 
 // Preload the model
 useGLTF.preload('/bee.glb');
 
-export const Drone = ({ cargo = true, ...props }: { cargo?: boolean } & JSX.IntrinsicElements['group']) => {
+export const Drone = ({ cargo = true, ...props }: { cargo?: boolean } & React.ComponentProps<'group'>) => {
     const group = useRef<Group>(null!);
     const { scene, animations } = useGLTF('/bee.glb');
     const { actions } = useAnimations(animations, group);
