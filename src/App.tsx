@@ -10,6 +10,7 @@ import { ArduinoLesson } from './pages/ArduinoLesson';
 import { ESPLesson } from './pages/ESPLesson';
 import { RaspberryPiLesson } from './pages/RaspberryPiLesson';
 import { ServoMotorLesson } from './pages/ServoMotorLesson';
+import { IrSensorLesson } from './pages/IrSensorLesson';
 import { Cursor } from './components/dom/Cursor';
 import './App.css';
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/learning/esp32" component={ESPLesson} />
         <Route path="/learning/raspberry-pi-5" component={RaspberryPiLesson} />
         <Route path="/learning/servo-motor" component={ServoMotorLesson} />
+        <Route path="/learning/ir-sensor" component={IrSensorLesson} />
         <Route path="/">
           {/* Home / Experience Route */}
           <Navbar />

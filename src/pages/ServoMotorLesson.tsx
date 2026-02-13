@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useLocation } from 'wouter';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { motion } from 'framer-motion';
 
 const ContentSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
@@ -48,6 +50,8 @@ const PinItem = ({ name, details }: { name: string, details: string[] }) => (
 
 export const ServoMotorLesson = () => {
     const [, setLocation] = useLocation();
+    const isMobile = useIsMobile();
+    const [isContentVisible, setIsContentVisible] = useState(true);
 
     return (
         <div style={{
@@ -60,145 +64,194 @@ export const ServoMotorLesson = () => {
             position: 'relative'
         }}>
             {/* Left Side: Instructions Panel */}
-            <motion.div
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                style={{
-                    width: '460px',
-                    padding: '0',
-                    zIndex: 10,
-                    background: 'rgba(5,5,5,0.98)',
-                    backdropFilter: 'blur(40px)',
-                    borderRight: '1px solid rgba(255,255,255,0.08)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: '20px 0 50px rgba(0,0,0,0.5)'
-                }}
-            >
-                {/* Header */}
-                <div style={{ padding: '3rem 3rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <button
-                        onClick={() => setLocation('/learning')}
-                        style={{
-                            background: 'transparent',
-                            border: '1px solid rgba(139, 92, 246, 0.3)',
-                            color: '#8b5cf6',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '2rem',
-                            cursor: 'pointer',
-                            marginBottom: '2rem',
-                            fontSize: '0.75rem',
-                            fontWeight: 'bold',
-                            letterSpacing: '0.1rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}
-                    >
-                        ← BACK TO TRAINING
-                    </button>
+            {(!isMobile || isContentVisible) && (
+                <motion.div
+                    initial={{ x: -100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    style={{
+                        width: isMobile ? '100%' : '460px',
+                        position: isMobile ? 'absolute' : 'relative',
+                        height: '100%',
+                        padding: '0',
+                        zIndex: 20,
+                        background: 'rgba(5,5,5,0.98)',
+                        backdropFilter: 'blur(40px)',
+                        borderRight: '1px solid rgba(255,255,255,0.08)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        boxShadow: '20px 0 50px rgba(0,0,0,0.5)'
+                    }}
+                >
+                    {/* Header */}
+                    <div style={{ padding: '3rem 3rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                            <button
+                                onClick={() => setLocation('/learning')}
+                                style={{
+                                    background: 'transparent',
+                                    border: '1px solid rgba(139, 92, 246, 0.3)',
+                                    color: '#8b5cf6',
+                                    padding: '0.5rem 1rem',
+                                    borderRadius: '2rem',
+                                    cursor: 'pointer',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 'bold',
+                                    letterSpacing: '0.1rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem'
+                                }}
+                            >
+                                ← BACK
+                            </button>
 
-                    <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', lineHeight: 1, fontWeight: 900, letterSpacing: '-0.05rem' }}>ServoMotor SG90</h1>
-                    <span style={{ fontSize: '0.8rem', color: '#94a3b8', letterSpacing: '0.05rem' }}>PRECISION ACTUATOR & ROBOTICS COMPONENT</span>
-                </div>
+                            {isMobile && (
+                                <button
+                                    onClick={() => setIsContentVisible(false)}
+                                    style={{
+                                        background: 'rgba(139, 92, 246, 0.1)',
+                                        border: '1px solid rgba(139, 92, 246, 0.3)',
+                                        color: '#8b5cf6',
+                                        padding: '0.5rem 1rem',
+                                        borderRadius: '2rem',
+                                        cursor: 'pointer',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 'bold',
+                                        letterSpacing: '0.1rem'
+                                    }}
+                                >
+                                    VIEW 3D MODEL
+                                </button>
+                            )}
+                        </div>
 
-                {/* Scrollable Content */}
-                <div style={{
-                    flex: 1,
-                    overflowY: 'auto',
-                    padding: '3rem 3rem',
-                    scrollbarWidth: 'thin',
-                    scrollbarColor: '#8b5cf6 transparent'
-                }} className="custom-scroll">
-
-                    <div style={{ marginBottom: '3rem', color: '#cbd5e1', lineHeight: 1.6 }}>
-                        <p style={{ marginBottom: '1rem' }}>
-                            A servo motor is a rotary actuator used for precise control of angular position, speed, and torque.
-                            It is widely used in robotics, robotic arms, automation, and RC systems where accurate movement is required.
-                        </p>
+                        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', lineHeight: 1, fontWeight: 900, letterSpacing: '-0.05rem' }}>ServoMotor SG90</h1>
+                        <span style={{ fontSize: '0.8rem', color: '#94a3b8', letterSpacing: '0.05rem' }}>PRECISION ACTUATOR & ROBOTICS COMPONENT</span>
                     </div>
 
-                    <ContentSection title="1. How It Works">
-                        <PinItem name="Mechanism" details={[
-                            "Closed-loop control system",
-                            "Continuously checks position via feedback",
-                            "Controlled by PWM signal from microcontroller"
-                        ]} />
-                    </ContentSection>
+                    {/* Scrollable Content */}
+                    <div style={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        padding: '3rem 3rem',
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#8b5cf6 transparent',
+                        marginBottom: '5rem'
+                    }} className="custom-scroll">
 
-                    <ContentSection title="2. Pin Configuration">
-                        <PinItem name="Wiring" details={[
-                            "Red: VCC (Power 5V-6V)",
-                            "Brown/Black: GND (Ground)",
-                            "Yellow/Orange: Signal (PWM control)"
-                        ]} />
-                    </ContentSection>
+                        <div style={{ marginBottom: '3rem', color: '#cbd5e1', lineHeight: 1.6 }}>
+                            <p style={{ marginBottom: '1rem' }}>
+                                A servo motor is a rotary actuator used for precise control of angular position, speed, and torque.
+                                It is widely used in robotics, robotic arms, automation, and RC systems where accurate movement is required.
+                            </p>
+                        </div>
 
-                    <ContentSection title="3. Control Signal (PWM)">
-                        <PinItem name="Basics" details={[
-                            "Frequency: 50 Hz",
-                            "Range: 0° to 180°"
-                        ]} />
-                        <PinItem name="Pulse Width Mapping" details={[
-                            "1 ms: 0° Position",
-                            "1.5 ms: 90° Position",
-                            "2 ms: 180° Position"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="1. How It Works">
+                            <PinItem name="Mechanism" details={[
+                                "Closed-loop control system",
+                                "Continuously checks position via feedback",
+                                "Controlled by PWM signal from microcontroller"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="4. Types of Servos">
-                        <PinItem name="Positional" details={[
-                            "Range: 0° - 180°",
-                            "Usage: Standard robotics, arms"
-                        ]} />
-                        <PinItem name="Continuous" details={[
-                            "Range: 360° continuous rotation",
-                            "Usage: Wheels, drive systems"
-                        ]} />
-                        <PinItem name="Digital" details={[
-                            "Features: Faster response, higher precision",
-                            "Advantage: Better torque control"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="2. Pin Configuration">
+                            <PinItem name="Wiring" details={[
+                                "Red: VCC (Power 5V-6V)",
+                                "Brown/Black: GND (Ground)",
+                                "Yellow/Orange: Signal (PWM control)"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="5. Applications">
-                        <PinItem name="Common Uses" details={[
-                            "Robotic arms",
-                            "Humanoid robots",
-                            "Pan-tilt camera systems",
-                            "Automated doors",
-                            "CNC and automation systems"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="3. Control Signal (PWM)">
+                            <PinItem name="Basics" details={[
+                                "Frequency: 50 Hz",
+                                "Range: 0° to 180°"
+                            ]} />
+                            <PinItem name="Pulse Width Mapping" details={[
+                                "1 ms: 0° Position",
+                                "1.5 ms: 90° Position",
+                                "2 ms: 180° Position"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="6. With Microcontrollers">
-                        <PinItem name="ESP32" details={[
-                            "Method: PWM control",
-                            "Benefit: Smooth, precise motion for wireless robotics"
-                        ]} />
-                        <PinItem name="Raspberry Pi" details={[
-                            "Method: GPIO PWM or external driver",
-                            "Context: AI + Robotics applications"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="4. Types of Servos">
+                            <PinItem name="Positional" details={[
+                                "Range: 0° - 180°",
+                                "Usage: Standard robotics, arms"
+                            ]} />
+                            <PinItem name="Continuous" details={[
+                                "Range: 360° continuous rotation",
+                                "Usage: Wheels, drive systems"
+                            ]} />
+                            <PinItem name="Digital" details={[
+                                "Features: Faster response, higher precision",
+                                "Advantage: Better torque control"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="7. Pros & Cons">
-                        <PinItem name="Advantages" details={[
-                            "High accuracy",
-                            "Easy to control",
-                            "Compact size",
-                            "Reliable position holding"
-                        ]} />
-                        <PinItem name="Limitations" details={[
-                            "Limited rotation (standard types)",
-                            "Requires constant power",
-                            "Torque limited by size"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="5. Applications">
+                            <PinItem name="Common Uses" details={[
+                                "Robotic arms",
+                                "Humanoid robots",
+                                "Pan-tilt camera systems",
+                                "Automated doors",
+                                "CNC and automation systems"
+                            ]} />
+                        </ContentSection>
 
-                </div>
-            </motion.div>
+                        <ContentSection title="6. With Microcontrollers">
+                            <PinItem name="ESP32" details={[
+                                "Method: PWM control",
+                                "Benefit: Smooth, precise motion for wireless robotics"
+                            ]} />
+                            <PinItem name="Raspberry Pi" details={[
+                                "Method: GPIO PWM or external driver",
+                                "Context: AI + Robotics applications"
+                            ]} />
+                        </ContentSection>
+
+                        <ContentSection title="7. Pros & Cons">
+                            <PinItem name="Advantages" details={[
+                                "High accuracy",
+                                "Easy to control",
+                                "Compact size",
+                                "Reliable position holding"
+                            ]} />
+                            <PinItem name="Limitations" details={[
+                                "Limited rotation (standard types)",
+                                "Requires constant power",
+                                "Torque limited by size"
+                            ]} />
+                        </ContentSection>
+
+                    </div>
+                </motion.div>
+            )}
+
+            {isMobile && !isContentVisible && (
+                <button
+                    onClick={() => setIsContentVisible(true)}
+                    style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        left: '1rem',
+                        zIndex: 30,
+                        background: 'rgba(5,5,5,0.8)',
+                        border: '1px solid rgba(139, 92, 246, 0.3)',
+                        color: '#8b5cf6',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '2rem',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '0.8rem',
+                        backdropFilter: 'blur(10px)'
+                    }}
+                >
+                    INFO
+                </button>
+            )
+            }
 
             {/* Right Side: Sketchfab Embed */}
             <div style={{ flex: 1, position: 'relative', background: '#050505', display: 'flex', flexDirection: 'column' }}>

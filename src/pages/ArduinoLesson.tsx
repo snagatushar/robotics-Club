@@ -1,4 +1,5 @@
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Environment, ContactShadows } from '@react-three/drei';
 import { useLocation } from 'wouter';
@@ -61,6 +62,8 @@ const PinItem = ({ name, details }: { name: string, details: string[] }) => (
 
 export const ArduinoLesson = () => {
     const [, setLocation] = useLocation();
+    const isMobile = useIsMobile();
+    const [isContentVisible, setIsContentVisible] = useState(true);
 
     return (
         <div style={{
@@ -73,154 +76,203 @@ export const ArduinoLesson = () => {
             position: 'relative'
         }}>
             {/* Left Side: Instructions Panel */}
-            <motion.div
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                style={{
-                    width: '460px',
-                    padding: '0',
-                    zIndex: 10,
-                    background: 'rgba(5,5,5,0.98)',
-                    backdropFilter: 'blur(40px)',
-                    borderRight: '1px solid rgba(255,255,255,0.08)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: '20px 0 50px rgba(0,0,0,0.5)'
-                }}
-            >
-                {/* Header */}
-                <div style={{ padding: '3rem 3rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <button
-                        onClick={() => setLocation('/learning')}
-                        style={{
-                            background: 'transparent',
-                            border: '1px solid rgba(59, 130, 246, 0.3)',
-                            color: '#3b82f6',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '2rem',
-                            cursor: 'pointer',
-                            marginBottom: '2rem',
-                            fontSize: '0.75rem',
-                            fontWeight: 'bold',
-                            letterSpacing: '0.1rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}
-                    >
-                        ← BACK TO TRAINING
-                    </button>
+            {(!isMobile || isContentVisible) && (
+                <motion.div
+                    initial={{ x: -100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    style={{
+                        width: isMobile ? '100%' : '460px',
+                        position: isMobile ? 'absolute' : 'relative',
+                        height: '100%',
+                        padding: '0',
+                        zIndex: 20, // Increased z-index to be above 3D view on mobile
+                        background: 'rgba(5,5,5,0.98)',
+                        backdropFilter: 'blur(40px)',
+                        borderRight: '1px solid rgba(255,255,255,0.08)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        boxShadow: '20px 0 50px rgba(0,0,0,0.5)'
+                    }}
+                >
+                    {/* Header */}
+                    <div style={{ padding: '3rem 3rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                            <button
+                                onClick={() => setLocation('/learning')}
+                                style={{
+                                    background: 'transparent',
+                                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                                    color: '#3b82f6',
+                                    padding: '0.5rem 1rem',
+                                    borderRadius: '2rem',
+                                    cursor: 'pointer',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 'bold',
+                                    letterSpacing: '0.1rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem'
+                                }}
+                            >
+                                ← BACK
+                            </button>
 
-                    <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', lineHeight: 1, fontWeight: 900, letterSpacing: '-0.05rem' }}>Arduino Uno</h1>
-                    <a style={{ color: 'red' }} href="https://youtu.be/HIXnwFB902M?si=mnhflfL3KCJsSnXS">Arduino Uno Explanation video</a>
+                            {isMobile && (
+                                <button
+                                    onClick={() => setIsContentVisible(false)}
+                                    style={{
+                                        background: 'rgba(59, 130, 246, 0.1)',
+                                        border: '1px solid rgba(59, 130, 246, 0.3)',
+                                        color: '#3b82f6',
+                                        padding: '0.5rem 1rem',
+                                        borderRadius: '2rem',
+                                        cursor: 'pointer',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 'bold',
+                                        letterSpacing: '0.1rem'
+                                    }}
+                                >
+                                    VIEW 3D MODEL
+                                </button>
+                            )}
+                        </div>
 
-                </div>
+                        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', lineHeight: 1, fontWeight: 900, letterSpacing: '-0.05rem' }}>Arduino Uno</h1>
+                        <a style={{ color: 'red' }} href="https://youtu.be/HIXnwFB902M?si=mnhflfL3KCJsSnXS">Arduino Uno Explanation video</a>
 
-                {/* Scrollable Content */}
-                <div style={{
-                    flex: 1,
-                    overflowY: 'auto',
-                    padding: '3rem 3rem',
-                    scrollbarWidth: 'thin',
-                    scrollbarColor: '#3b82f6 transparent'
-                }} className="custom-scroll">
+                    </div>
 
-                    <ContentSection title="1. Power Systems">
-                        <PinItem name="VIN" details={[
-                            "Type: External Power Input",
-                            "Recommended Voltage: 7V – 12V",
-                            "Usage: Power via adapters or batteries"
-                        ]} />
-                        <PinItem name="5V / 3.3V" details={[
-                            "Type: Regulated Outputs",
-                            "5V: For sensors, modules, logic circuits",
-                            "3.3V: Max current 50mA (low-power devices)"
-                        ]} />
-                        <PinItem name="GND" details={[
-                            "Type: Common Ground",
-                            "Reference: 0V",
-                            "Note: Must be shared across all connected circuits"
-                        ]} />
-                        <PinItem name="RESET" details={[
-                            "Type: System Restart",
-                            "Function: Pulled LOW to restart program execution"
-                        ]} />
-                        <PinItem name="IOREF" details={[
-                            "Type: Voltage Reference",
-                            "Purpose: Allows shields to detect board operating voltage"
-                        ]} />
-                    </ContentSection>
+                    {/* Scrollable Content */}
+                    <div style={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        padding: '3rem 3rem',
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#3b82f6 transparent',
+                        marginBottom: '5rem' // Extra space for mobile nav
+                    }} className="custom-scroll">
 
-                    <ContentSection title="2. Analog Inputs (A0 – A5)">
-                        <PinItem name="A0 – A5" details={[
-                            "Function: Reading continuous (analog) values",
-                            "Resolution: 10-bit (0 – 1023)",
-                            "Voltage Range: 0V – 5V",
-                            "Potentiometers",
-                            "Temperature sensors",
-                            "Light sensors"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="1. Power Systems">
+                            <PinItem name="VIN" details={[
+                                "Type: External Power Input",
+                                "Recommended Voltage: 7V – 12V",
+                                "Usage: Power via adapters or batteries"
+                            ]} />
+                            <PinItem name="5V / 3.3V" details={[
+                                "Type: Regulated Outputs",
+                                "5V: For sensors, modules, logic circuits",
+                                "3.3V: Max current 50mA (low-power devices)"
+                            ]} />
+                            <PinItem name="GND" details={[
+                                "Type: Common Ground",
+                                "Reference: 0V",
+                                "Note: Must be shared across all connected circuits"
+                            ]} />
+                            <PinItem name="RESET" details={[
+                                "Type: System Restart",
+                                "Function: Pulled LOW to restart program execution"
+                            ]} />
+                            <PinItem name="IOREF" details={[
+                                "Type: Voltage Reference",
+                                "Purpose: Allows shields to detect board operating voltage"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="3. Digital Interface">
-                        <PinItem name="Pins 0 – 13" details={[
-                            "Type: General Purpose I/O",
-                            "Logic Level: 5V",
-                            "INPUT",
-                            "OUTPUT",
-                            "INPUT_PULLUP"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="2. Analog Inputs (A0 – A5)">
+                            <PinItem name="A0 – A5" details={[
+                                "Function: Reading continuous (analog) values",
+                                "Resolution: 10-bit (0 – 1023)",
+                                "Voltage Range: 0V – 5V",
+                                "Potentiometers",
+                                "Temperature sensors",
+                                "Light sensors"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="4. Special Purpose Pins">
-                        <PinItem name="0 (RX) / 1 (TX)" details={[
-                            "Function: Serial Communication",
-                            "Purpose: Data transfer between Arduino and USB/Computer",
-                            "Warning: Avoid usage during active debugging"
-                        ]} />
-                        <PinItem name="PWM (~) Pins" details={[
-                            "Type: Pulse Width Modulation",
-                            "Available Pins: 3, 5, 6, 9, 10, 11",
-                            "Motor speed control",
-                            "LED brightness control"
-                        ]} />
-                        <PinItem name="Pin 13" details={[
-                            "Feature: Onboard LED",
-                            "Usage: Built-in visual debugging indicator"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="3. Digital Interface">
+                            <PinItem name="Pins 0 – 13" details={[
+                                "Type: General Purpose I/O",
+                                "Logic Level: 5V",
+                                "INPUT",
+                                "OUTPUT",
+                                "INPUT_PULLUP"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="5. Communication Hub">
-                        <PinItem name="I²C System" details={[
-                            "Pins: A4 → SDA (Data), A5 → SCL (Clock)",
-                            "Devices: OLED displays, RTC modules, advanced sensors"
-                        ]} />
-                        <PinItem name="SPI Interface" details={[
-                            "10 → SS",
-                            "11 → MOSI",
-                            "12 → MISO",
-                            "13 → SCK",
-                            "Use Case: High-speed communication (SD Cards, RFID)"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="4. Special Purpose Pins">
+                            <PinItem name="0 (RX) / 1 (TX)" details={[
+                                "Function: Serial Communication",
+                                "Purpose: Data transfer between Arduino and USB/Computer",
+                                "Warning: Avoid usage during active debugging"
+                            ]} />
+                            <PinItem name="PWM (~) Pins" details={[
+                                "Type: Pulse Width Modulation",
+                                "Available Pins: 3, 5, 6, 9, 10, 11",
+                                "Motor speed control",
+                                "LED brightness control"
+                            ]} />
+                            <PinItem name="Pin 13" details={[
+                                "Feature: Onboard LED",
+                                "Usage: Built-in visual debugging indicator"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="6. Precision & Control">
-                        <PinItem name="AREF" details={[
-                            "Type: Analog Reference",
-                            "Function: Custom precision voltage mapping for analog inputs"
-                        ]} />
-                        <PinItem name="ICSP Header" details={[
-                            "Function: Direct Programming",
-                            "Purpose: Bypass bootloader / direct SPI access"
-                        ]} />
-                        <PinItem name="Reset Button" details={[
-                            "Type: Manual Override",
-                            "Action: Immediate software restart"
-                        ]} />
-                    </ContentSection>
-                </div>
-            </motion.div>
+                        <ContentSection title="5. Communication Hub">
+                            <PinItem name="I²C System" details={[
+                                "Pins: A4 → SDA (Data), A5 → SCL (Clock)",
+                                "Devices: OLED displays, RTC modules, advanced sensors"
+                            ]} />
+                            <PinItem name="SPI Interface" details={[
+                                "10 → SS",
+                                "11 → MOSI",
+                                "12 → MISO",
+                                "13 → SCK",
+                                "Use Case: High-speed communication (SD Cards, RFID)"
+                            ]} />
+                        </ContentSection>
+
+                        <ContentSection title="6. Precision & Control">
+                            <PinItem name="AREF" details={[
+                                "Type: Analog Reference",
+                                "Function: Custom precision voltage mapping for analog inputs"
+                            ]} />
+                            <PinItem name="ICSP Header" details={[
+                                "Function: Direct Programming",
+                                "Purpose: Bypass bootloader / direct SPI access"
+                            ]} />
+                            <PinItem name="Reset Button" details={[
+                                "Type: Manual Override",
+                                "Action: Immediate software restart"
+                            ]} />
+                        </ContentSection>
+                    </div>
+                </motion.div>
+            )}
+
+            {isMobile && !isContentVisible && (
+                <button
+                    onClick={() => setIsContentVisible(true)}
+                    style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        left: '1rem',
+                        zIndex: 30,
+                        background: 'rgba(5,5,5,0.8)',
+                        border: '1px solid rgba(59, 130, 246, 0.3)',
+                        color: '#3b82f6',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '2rem',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '0.8rem',
+                        backdropFilter: 'blur(10px)'
+                    }}
+                >
+                    INFO
+                </button>
+            )
+            }
 
             {/* Right Side: Local Interactive 3D Viewer */}
             <div style={{ flex: 1, position: 'relative', background: '#050505' }}>

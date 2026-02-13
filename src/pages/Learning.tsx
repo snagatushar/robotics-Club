@@ -17,14 +17,16 @@ export const Learning = () => {
         { title: 'ESP32', duration: '', level: '', color: '#10b981', slug: 'esp32' },
         { title: 'Raspberry Pi 5', duration: '', level: '', color: '#f59e0b', slug: 'raspberry-pi-5' },
         { title: 'ServoMotor', duration: '', level: '', color: '#8b5cf6', slug: 'servo-motor' },
-        { title: 'Reinforcement Learning', duration: '', level: '', color: '#ef4444' },
-        { title: 'Ethics in AI', duration: '', level: '', color: '#ec4899' },
+        { title: 'IR Sensor', duration: '', level: '', color: '#ef4444', slug: 'ir-sensor' },
+
     ];
 
     return (
         <div style={{
-            width: '100%',
-            minHeight: '100vh',
+            width: '100vw',
+            height: '100vh',
+            overflowY: 'auto',
+            overflowX: 'hidden',
             background: '#050505',
             color: '#fff',
             padding: '100px 5vw',
@@ -102,21 +104,7 @@ export const Learning = () => {
             </div>
 
             {/* CTA */}
-            <div style={{ maxWidth: '1200px', margin: '6rem auto 0', textAlign: 'center', padding: '4rem', background: 'rgba(255,255,255,0.02)', borderRadius: '1rem' }}>
-                <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Certification Program</h2>
-                <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>Complete all modules to earn your RoboLab Systems Operator Badge.</p>
-                <button style={{
-                    padding: '1rem 2rem',
-                    background: '#fff',
-                    color: '#000',
-                    border: 'none',
-                    borderRadius: '2rem',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                }}>
-                    Submit Application
-                </button>
-            </div>
+
         </div>
     );
 };
