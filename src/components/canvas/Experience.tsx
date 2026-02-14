@@ -20,27 +20,30 @@ const SceneContent = () => {
         const targetPos = new THREE.Vector3(0, 0, 5);
         let targetRotY = 0; // Default: facing forward
 
-        const P = 1 / (isMobile ? 5 : 4); // Page fraction
+        const PAGE_COUNT = isMobile ? 7 : 6;
+        const P = 1 / (PAGE_COUNT - 1); // Normalize to 0-1 range based on scroll progress
 
-        // Page 1: Home (0 -> 0.25)
-        // Shift Robot slightly right, look left
+        // Helper to check range
+        // We use scroll.range(start, distance) -> 0 to 1
+        // But scroll.visible(start, distance) is also good.
+        // Let's stick to checking ranges manually or using helper if easier.
+        // Actually, existing code used scroll.visible(k * P, P).
+        // Let's refine based on the new page count.
+
+        // Page 1: Home (0 -> 1)
         if (scroll.visible(0, P)) {
             if (isMobile) {
-                // Mobile: Move lower to avoid overlapping text
                 targetPos.set(0, -2, 7);
                 targetRotY = 0;
             } else {
-                // Desktop: Right side, looking left
                 targetPos.set(1.5, 0, 4.5);
                 targetRotY = -0.3;
             }
         }
 
-        // Page 2: About (0.25 -> 0.5)
-        // Shift Robot left, look right
+        // Page 2: About (1 -> 2)
         if (scroll.visible(P, P)) {
             if (isMobile) {
-                // Mobile: Move way down to be a Footer-like element or background
                 targetPos.set(0, -2.5, 7);
                 targetRotY = 0.5;
             } else {
@@ -49,20 +52,44 @@ const SceneContent = () => {
             }
         }
 
-        // Page 3: Projects (0.5 -> 0.75)
-        // Center focus
+        // Page 3: Project 1 - Humanoid (2 -> 3)
+        // Robot RIGHT, Looking LEFT
         if (scroll.visible(2 * P, P)) {
             if (isMobile) {
                 targetPos.set(0, -2.5, 7);
+                targetRotY = 0;
             } else {
-                targetPos.set(0, 0, 6);
+                targetPos.set(1.5, 0, 5); // Right
+                targetRotY = -0.5; // Look Left
             }
-            targetRotY = 0;
         }
 
-        // Page 4: Contact (0.75 -> 1.0)
-        // Close up
+        // Page 4: Project 2 - Arm (3 -> 4)
+        // Robot LEFT, Looking RIGHT
         if (scroll.visible(3 * P, P)) {
+            if (isMobile) {
+                targetPos.set(0, -2.5, 7);
+                targetRotY = 0;
+            } else {
+                targetPos.set(-1.5, 0, 5); // Left
+                targetRotY = 0.5; // Look Right
+            }
+        }
+
+        // Page 5: Project 3 - Car (4 -> 5)
+        // Robot RIGHT, Looking LEFT
+        if (scroll.visible(4 * P, P)) {
+            if (isMobile) {
+                targetPos.set(0, -2.5, 7);
+                targetRotY = 0;
+            } else {
+                targetPos.set(1.5, 0, 5); // Right
+                targetRotY = -0.5; // Look Left
+            }
+        }
+
+        // Page 6: Contact (5 -> 6)
+        if (scroll.visible(5 * P, P)) {
             if (isMobile) {
                 targetPos.set(0, -2, 6);
             } else {
@@ -125,7 +152,7 @@ export const Experience = () => {
         // 2. No shadows prop = WebGL renderer doesn't allocate shadow maps
         // 3. performance prop for automatic regression (Drei)
         <Canvas dpr={[1, 1.5]} performance={{ min: 0.5 }} camera={{ position: [0, 0, 5], fov: 35 }}>
-            <ScrollControls pages={isMobile ? 5 : 4} damping={0.2}>
+            <ScrollControls pages={isMobile ? 7 : 6} damping={0.2}>
                 <SceneContent />
                 <Scroll html style={{ width: '100%', height: '100%' }}>
                     <Overlay />

@@ -15,11 +15,8 @@ export const Robot = (props: React.ComponentProps<'group'>) => {
 
     useEffect(() => {
         if (actions) {
-            // Log available animations to help debug
-            const keys = Object.keys(actions);
-            console.log('Available animations:', keys);
-
             // Play the first animation found, loop it
+            const keys = Object.keys(actions);
             if (keys.length > 0) {
                 const actionName = keys[0];
                 const action = actions[actionName];

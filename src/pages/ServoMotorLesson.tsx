@@ -279,7 +279,7 @@ export const ServoMotorLesson = () => {
                 }}>
                     <div className="glass-panel" style={{ padding: '1rem', background: 'rgba(0,0,0,0.8)', pointerEvents: 'auto' }}>
                         <p style={{ margin: 0, color: '#94a3b8' }}>
-                            <a href="https://sketchfab.com/3d-models/servomotor-sg90-863b04f543a94b82ad5f660aafd997de?utm_medium=embed&utm_campaign=share-popup&utm_content=863b04f543a94b82ad5f660aafd997de" target="_blank" rel="nofollow" style={{ fontWeight: 'bold', color: '#8b5cf6', textDecoration: 'none' }}> ServoMotor</a>
+                            <a href="https://sketchfab.com/3d-models/servomotor-sg90-863b04f543a94b82ad5f660aafd997de?utm_medium=embed&utm_campaign=share-popup&utm_content=863b04f543a94b82ad5f660aafd997de" target="_blank" rel="noopener noreferrer nofollow" style={{ fontWeight: 'bold', color: '#8b5cf6', textDecoration: 'none' }}> ServoMotor</a>
 
                         </p>
                     </div>

@@ -271,7 +271,7 @@ export const RaspberryPiLesson = () => {
                 }}>
                     <div className="glass-panel" style={{ padding: '1rem', background: 'rgba(0,0,0,0.8)', pointerEvents: 'auto' }}>
                         <p style={{ margin: 0, color: '#94a3b8' }}>
-                            <a href="https://sketchfab.com/3d-models/raspberry-pi-5-aa1652bd5f344b2baae8d239c8fe4bda?utm_medium=embed&utm_campaign=share-popup&utm_content=aa1652bd5f344b2baae8d239c8fe4bda" target="_blank" rel="nofollow" style={{ fontWeight: 'bold', color: '#f59e0b', textDecoration: 'none' }}> Raspberry Pi 5 </a>
+                            <a href="https://sketchfab.com/3d-models/raspberry-pi-5-aa1652bd5f344b2baae8d239c8fe4bda?utm_medium=embed&utm_campaign=share-popup&utm_content=aa1652bd5f344b2baae8d239c8fe4bda" target="_blank" rel="noopener noreferrer nofollow" style={{ fontWeight: 'bold', color: '#f59e0b', textDecoration: 'none' }}> Raspberry Pi 5 </a>
 
                         </p>
                     </div>

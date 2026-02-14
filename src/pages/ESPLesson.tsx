@@ -228,7 +228,7 @@ export const ESPLesson = () => {
                 }}>
                     <div className="glass-panel" style={{ padding: '1rem', background: 'rgba(0,0,0,0.8)', pointerEvents: 'auto' }}>
                         <p style={{ margin: 0, color: '#94a3b8' }}>
-                            <a href="https://sketchfab.com/3d-models/nodemcu-esp32-a09ed2e58a4248ffb1ab5e6597754f18?utm_medium=embed&utm_campaign=share-popup&utm_content=a09ed2e58a4248ffb1ab5e6597754f18" target="_blank" rel="nofollow" style={{ fontWeight: 'bold', color: '#10b981', textDecoration: 'none' }}> NodeMCU ESP32 </a>
+                            <a href="https://sketchfab.com/3d-models/nodemcu-esp32-a09ed2e58a4248ffb1ab5e6597754f18?utm_medium=embed&utm_campaign=share-popup&utm_content=a09ed2e58a4248ffb1ab5e6597754f18" target="_blank" rel="noopener noreferrer nofollow" style={{ fontWeight: 'bold', color: '#10b981', textDecoration: 'none' }}> NodeMCU ESP32 </a>
 
                         </p>
                     </div>

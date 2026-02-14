@@ -88,60 +88,100 @@ export const Overlay = () => {
                 </motion.div>
             </Section>
 
-            {/* PROJECTS - Centered Container */}
-            <Section id="projects" style={{ justifyContent: 'center', textAlign: 'center' }}>
+            {/* PROJECT 1 - Humanoid Robot (Left Text) */}
+            <Section
+                id="project-1"
+                style={{
+                    justifyContent: isMobile ? 'center' : 'flex-start',
+                    alignItems: 'center',
+                }}
+                innerStyle={{
+                    maxWidth: '1200px',
+                    padding: isMobile ? '0 1rem' : '0',
+                }}
+            >
                 <motion.div
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
+                    initial={{ x: -50, opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.8 }}
-                    style={{ width: '100%' }}
+                    className="glass-panel"
+                    style={{
+                        padding: isMobile ? '2rem' : '3rem',
+                        maxWidth: '300px',
+                        textAlign: 'left',
+                        marginRight: isMobile ? '0' : 'auto' // Pushes to left
+                    }}
                 >
+                    <h5 className="text-accent" style={{ marginBottom: '0.5rem', fontSize: '1rem' }}>UPCOMING PROJECTS</h5>
+                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🤖</div>
+                    <h3 style={{ marginBottom: '1rem', fontSize: '2rem' }}>Humanoid Robot Platform</h3>
+                    <p style={{ fontSize: '1.1rem', color: '#cbd5e1', lineHeight: 1.6 }}>
+                        Our primary goal is to design and develop a modular humanoid robot capable of walking, interacting, and assisting humans. This robot will include computer vision, speech recognition, and AI-based decision-making.
+                    </p>
+                </motion.div>
+            </Section>
 
-                    <h2 style={{ fontSize: isMobile ? '2.5rem' : '3rem', marginBottom: '3rem' }}>Upcoming Projects</h2>
+            {/* PROJECT 2 - Robotic Arm (Right Text) */}
+            <Section
+                id="project-2"
+                style={{
+                    justifyContent: isMobile ? 'center' : 'flex-end',
+                    alignItems: 'center',
+                }}
+                innerStyle={{
+                    maxWidth: '1200px',
+                    padding: isMobile ? '0 1rem' : '0',
+                }}
+            >
+                <motion.div
+                    initial={{ x: 50, opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    className="glass-panel"
+                    style={{
+                        padding: isMobile ? '2rem' : '3rem',
+                        maxWidth: '300px',
+                        textAlign: 'left', // Text itself is left-aligned inside the box
+                        marginLeft: isMobile ? '0' : 'auto' // Pushes to right
+                    }}
+                >
+                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏭</div>
+                    <h3 style={{ marginBottom: '1rem', fontSize: '2rem' }}>Automotive Manufacturing Arm</h3>
+                    <p style={{ fontSize: '1.1rem', color: '#cbd5e1', lineHeight: 1.6 }}>
+                        Our aim is to design and implement an intelligent robotic arm capable of automating key tasks in automotive manufacturing. The system will simulate assembly, object handling, and inspection processes using computer vision.
+                    </p>
+                </motion.div>
+            </Section>
 
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', // Decreased min-width for mobile
-                        gap: '2rem',
-                        maxWidth: '1200px',
-                        margin: '0 auto',
-                        padding: isMobile ? '0 1rem' : '0'
-                    }}>
-                        {/* Project 1 */}
-                        <div className="glass-panel" style={{ padding: '2.5rem', textAlign: 'left', transition: 'transform 0.3s', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
-                            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-                                🤖
-                            </div>
-                            <h3 style={{ marginBottom: '1rem', fontSize: '2rem' }}>Humanoid Robot Platform</h3>
-                            <p style={{ fontSize: '1.2rem', color: '#ffffffff', lineHeight: 1.6 }}>
-                                Our primary goal is to design and develop a modular humanoid robot capable of walking, interacting, and assisting humans. This robot will include computer vision, speech recognition, and AI-based decision-making. It will serve as a foundation for future research in human-robot interaction and intelligent systems.
-                            </p>
-                        </div>
-
-                        {/* Project 2 */}
-                        <div className="glass-panel" style={{ padding: '2.5rem', textAlign: 'left', transition: 'transform 0.3s', cursor: 'pointer' }}>
-                            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-                                🏭
-                            </div>
-                            <h3 style={{ marginBottom: '1rem', fontSize: '2rem' }}>Automotive Manufacturing Robotic Arm</h3>
-                            <p style={{ fontSize: '1.2rem', color: '#ffffffff', lineHeight: 1.6 }}>
-                                Our aim is to design and implement an intelligent robotic arm capable of automating key tasks in automotive manufacturing. The system will simulate assembly, object handling, and inspection processes using computer vision and automation. This project will help students gain practical knowledge of industrial robotics and smart manufacturing.
-                            </p>
-                        </div>
-
-                        {/* Project 3 */}
-                        <div className="glass-panel" style={{ padding: '2.5rem', textAlign: 'left', transition: 'transform 0.3s', cursor: 'pointer' }}>
-                            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-                                🚗
-                            </div>
-                            <h3 style={{ marginBottom: '1rem', fontSize: '2rem' }}>Autonomous Smart Car</h3>
-                            <p style={{ fontSize: '1.2rem', color: '#ffffffff', lineHeight: 1.6 }}>
-                                Our goal is to build an autonomous robotic vehicle capable of navigating real-world environments with minimal human intervention. The system will use sensors, computer vision, and intelligent algorithms to detect obstacles, plan paths, and make real-time driving decisions. This project aims to explore the future of smart mobility and autonomous transportation.
-                            </p>
-
-                        </div>
-
-                    </div>
+            {/* PROJECT 3 - Autonomous Car (Left Text) */}
+            <Section
+                id="project-3"
+                style={{
+                    justifyContent: isMobile ? 'center' : 'flex-start',
+                    alignItems: 'center',
+                }}
+                innerStyle={{
+                    maxWidth: '1200px',
+                    padding: isMobile ? '0 1rem' : '0',
+                }}
+            >
+                <motion.div
+                    initial={{ x: -50, opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    className="glass-panel"
+                    style={{
+                        padding: isMobile ? '2rem' : '3rem',
+                        maxWidth: '300px',
+                        textAlign: 'left',
+                        marginRight: isMobile ? '0' : 'auto' // Pushes to left
+                    }}
+                >
+                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🚗</div>
+                    <h3 style={{ marginBottom: '1rem', fontSize: '2rem' }}>Autonomous Smart Car</h3>
+                    <p style={{ fontSize: '1.1rem', color: '#ffffffff', lineHeight: 1.6 }}>
+                        Our goal is to build an autonomous robotic vehicle capable of navigating real-world environments with minimal human intervention. The system will use sensors and intelligent algorithms to make real-time driving decisions.
+                    </p>
                 </motion.div>
             </Section>
 
@@ -157,21 +197,10 @@ export const Overlay = () => {
                     style={{ maxWidth: '700px', margin: '0 auto', padding: isMobile ? '0 1rem' : '0' }}
                 >
                     <h2 style={{ fontSize: isMobile ? '3rem' : '4rem', marginBottom: '1rem', lineHeight: 1 }}>Ready to Scale?</h2>
-                    <p style={{ fontSize: '1.25rem', color: '#cbd5e1', marginBottom: '3rem' }}>
+                    <p style={{ fontSize: '1.25rem', color: '#f8f8f8ff', marginBottom: '3rem' }}>
                         Partner with the leaders in humanoid robotics.
                     </p>
-                    <button style={{
-                        padding: '1.2rem 3.5rem',
-                        background: '#3b82f6',
-                        color: '#fff',
-                        borderRadius: '3rem',
-                        border: 'none',
-                        fontSize: '1.1rem',
-                        fontWeight: 700,
-                        cursor: 'pointer'
-                    }}>
-                        Initialize Partnership
-                    </button>
+
                 </motion.div>
             </Section>
         </div>
