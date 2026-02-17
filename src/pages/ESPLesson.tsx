@@ -230,6 +230,8 @@ export const ESPLesson = () => {
                 </motion.div>
             )}
 
+
+
             {isMobile && !isContentVisible && (
                 <button
                     onClick={() => setIsContentVisible(true)}
@@ -254,7 +256,7 @@ export const ESPLesson = () => {
             )}
 
             {/* Right Side: Sketchfab Embed - Always Rendered */}
-            <div style={{ flex: 1, position: 'relative', background: '#050505', display: 'flex', flexDirection: 'column', width: isMobile ? '100%' : 'auto', height: isMobile ? '100vh' : 'auto' }}>
+            <div style={{ flex: 1, position: 'relative', background: '#050505', display: 'flex', flexDirection: 'column' }}>
                 <div className="sketchfab-embed-wrapper" style={{ width: '100%', height: '100%' }}>
                     <iframe
                         title="NodeMCU ESP32"
@@ -285,6 +287,8 @@ export const ESPLesson = () => {
                     </div>
                 </div>
             </div>
+
+
 
             <style>{`
                 .custom-scroll::-webkit-scrollbar {

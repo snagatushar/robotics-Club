@@ -189,17 +189,25 @@ export const Overlay = () => {
 
 
             {/* CONTACT */}
-            <Section id="contact" style={{ justifyContent: 'center', textAlign: 'center' }}>
+            <Section id="contact" style={{ justifyContent: 'center', textAlign: 'center', fontWeight: 'bold' }}>
                 <motion.div
                     initial={{ y: 30, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
+                    whileInView={{ y: 0, opacity: 0.9 }}
                     transition={{ duration: 1 }}
-                    style={{ maxWidth: '700px', margin: '0 auto', padding: isMobile ? '0 1rem' : '0' }}
+                    className="liquid-glass"
+
+                    style={{
+                        maxWidth: '600px',
+                        margin: '0 auto',
+                        padding: isMobile ? '2rem 1rem' : '4rem',
+                        position: 'relative' // Ensure z-index works for children
+                    }}
                 >
-                    <h2 style={{ fontSize: isMobile ? '3rem' : '4rem', marginBottom: '1rem', lineHeight: 1 }}>Ready to Scale?</h2>
-                    <p style={{ fontSize: '1.25rem', color: '#f8f8f8ff', marginBottom: '3rem' }}>
+                    <h2 style={{ fontSize: isMobile ? '3rem' : '4rem', marginBottom: '1rem', lineHeight: 1, color: '#ffffff' }}>Ready to Scale?</h2>
+                    <p style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '2rem' }}>
                         Partner with the leaders in humanoid robotics.
                     </p>
+
 
                 </motion.div>
             </Section>
