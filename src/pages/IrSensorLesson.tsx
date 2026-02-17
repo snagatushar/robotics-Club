@@ -1,9 +1,10 @@
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { IrSensorModel } from '../components/canvas/IrSensor';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const ContentSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div style={{ marginBottom: '3rem' }}>
@@ -52,6 +53,8 @@ const PinItem = ({ name, details }: { name: string, details: string[] }) => (
 
 export const IrSensorLesson = () => {
     const [, setLocation] = useLocation();
+    const isMobile = useIsMobile();
+    const [isContentVisible, setIsContentVisible] = useState(true);
 
     return (
         <div style={{
@@ -61,120 +64,167 @@ export const IrSensorLesson = () => {
             color: '#fff',
             display: 'flex',
             overflow: 'hidden',
-            position: 'relative'
+            position: 'relative',
         }}>
             {/* Left Side: Instructions Panel */}
-            <motion.div
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                style={{
-                    width: '460px',
-                    padding: '0',
-                    zIndex: 10,
-                    background: 'rgba(5,5,5,0.98)',
-                    backdropFilter: 'blur(40px)',
-                    borderRight: '1px solid rgba(255,255,255,0.08)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: '20px 0 50px rgba(0,0,0,0.5)'
-                }}
-            >
-                {/* Header */}
-                <div style={{ padding: '3rem 3rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <button
-                        onClick={() => setLocation('/learning')}
-                        style={{
-                            background: 'transparent',
-                            border: '1px solid rgba(239, 68, 68, 0.3)',
-                            color: '#ef4444',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '2rem',
-                            cursor: 'pointer',
-                            marginBottom: '2rem',
-                            fontSize: '0.75rem',
-                            fontWeight: 'bold',
-                            letterSpacing: '0.1rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}
-                    >
-                        ← BACK TO TRAINING
-                    </button>
+            {(!isMobile || isContentVisible) && (
+                <motion.div
+                    initial={{ x: -100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    style={{
+                        width: isMobile ? '100%' : '460px',
+                        position: isMobile ? 'absolute' : 'relative',
+                        height: '100%',
+                        padding: '0',
+                        zIndex: 20,
+                        background: 'rgba(5,5,5,0.98)',
+                        borderRight: '1px solid rgba(255,255,255,0.08)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        boxShadow: '20px 0 50px rgba(0,0,0,0.5)',
+                    }}
+                >
+                    {/* Header */}
+                    <div style={{ padding: '3rem 3rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                            <button
+                                onClick={() => setLocation('/learning')}
+                                style={{
+                                    background: 'transparent',
+                                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                                    color: '#ef4444',
+                                    padding: '0.5rem 1rem',
+                                    borderRadius: '2rem',
+                                    cursor: 'pointer',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 'bold',
+                                    letterSpacing: '0.1rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem'
+                                }}
+                            >
+                                ← BACK
+                            </button>
 
-                    <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', lineHeight: 1, fontWeight: 900, letterSpacing: '-0.05rem' }}>IR Sensor</h1>
-                    <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                        Infrared Obstacle Avoidance Sensor Module
-                    </p>
-                    <a style={{ color: 'red' }} href="https://youtu.be/3-V8VNHJgFY?si=Ykie9DF9YSnIvDsE">IR SensorExplanation Video</a>
-                </div>
+                            {isMobile && (
+                                <button
+                                    onClick={() => setIsContentVisible(false)}
+                                    style={{
+                                        background: 'rgba(239, 68, 68, 0.1)',
+                                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                                        color: '#ef4444',
+                                        padding: '0.5rem 1rem',
+                                        borderRadius: '2rem',
+                                        cursor: 'pointer',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 'bold',
+                                        letterSpacing: '0.1rem'
+                                    }}
+                                >
+                                    VIEW 3D MODEL
+                                </button>
+                            )}
+                        </div>
 
-                {/* Scrollable Content */}
-                <div style={{
-                    flex: 1,
-                    overflowY: 'auto',
-                    padding: '3rem 3rem',
-                    scrollbarWidth: 'thin',
-                    scrollbarColor: '#ef4444 transparent'
-                }} className="custom-scroll">
+                        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', lineHeight: 1, fontWeight: 900, letterSpacing: '-0.05rem' }}>IR Sensor</h1>
+                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                            Infrared Obstacle Avoidance Sensor Module
+                        </p>
+                        <a style={{ color: 'red', display: 'inline-block', marginTop: '1rem' }} href="https://youtu.be/3-V8VNHJgFY?si=Ykie9DF9YSnIvDsE">IR Sensor Explanation Video</a>
+                    </div>
 
-                    <ContentSection title="1. What is an IR Sensor?">
-                        <PinItem name="Definition" details={[
-                            "An electronic device that detects infrared radiation (light not visible to human eye).",
-                            "Commonly used to detect: Objects, Obstacles, Motion, Distance (short range)."
-                        ]} />
-                        <PinItem name="Why Do We Use It?" details={[
-                            "Obstacle detection (robots)",
-                            "Line follower robots",
-                            "Automatic doors",
-                            "TV remote controls",
-                            "Object counting systems",
-                            "Parking sensors (basic systems)"
-                        ]} />
-                    </ContentSection>
+                    {/* Scrollable Content */}
+                    <div style={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        padding: '3rem 3rem',
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#ef4444 transparent',
+                        marginBottom: isMobile ? '5rem' : '0'
+                    }} className="custom-scroll">
 
-                    <ContentSection title="2. Functionality (How It Works)">
-                        <PinItem name="Basic Working Principle" details={[
-                            "Works using reflection of infrared light.",
-                            "1. IR LED (Transmitter) emits infrared light.",
-                            "2. If an object is in front → IR light reflects back.",
-                            "3. IR Receiver detects the reflected light.",
-                            "4. The sensor gives an output signal (HIGH or LOW)."
-                        ]} />
-                        <PinItem name="Logic" details={[
-                            "More reflected light → Object detected",
-                            "No reflection → No object"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="1. What is an IR Sensor?">
+                            <PinItem name="Definition" details={[
+                                "An electronic device that detects infrared radiation (light not visible to human eye).",
+                                "Commonly used to detect: Objects, Obstacles, Motion, Distance (short range)."
+                            ]} />
+                            <PinItem name="Why Do We Use It?" details={[
+                                "Obstacle detection (robots)",
+                                "Line follower robots",
+                                "Automatic doors",
+                                "TV remote controls",
+                                "Object counting systems",
+                                "Parking sensors (basic systems)"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="3. IR Sensor Module Parts">
-                        <PinItem name="Main Components" details={[
-                            "IR LED (Transmitter): Sends infrared light.",
-                            "IR Receiver: Receives reflected IR light.",
-                            "Comparator IC (Usually LM393): Converts analog signal to digital (0 or 1).",
-                            "Potentiometer: Adjusts sensitivity (distance range)."
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="2. Functionality (How It Works)">
+                            <PinItem name="Basic Working Principle" details={[
+                                "Works using reflection of infrared light.",
+                                "1. IR LED (Transmitter) emits infrared light.",
+                                "2. If an object is in front → IR light reflects back.",
+                                "3. IR Receiver detects the reflected light.",
+                                "4. The sensor gives an output signal (HIGH or LOW)."
+                            ]} />
+                            <PinItem name="Logic" details={[
+                                "More reflected light → Object detected",
+                                "No reflection → No object"
+                            ]} />
+                        </ContentSection>
 
-                    <ContentSection title="4. Pin Explanation">
-                        <PinItem name="3-Pin Module (Common)" details={[
-                            "VCC: Power supply (3.3V or 5V)",
-                            "GND: Ground (Connected to microcontroller ground)",
-                            "OUT: Output signal (HIGH or LOW). Changes state when object detected."
-                        ]} />
-                        <PinItem name="4-Pin Module (Optional)" details={[
-                            "VCC: Power",
-                            "GND: Ground",
-                            "DO (Digital Output): HIGH or LOW",
-                            "AO (Analog Output): Gives variable voltage depending on distance"
-                        ]} />
-                    </ContentSection>
+                        <ContentSection title="3. IR Sensor Module Parts">
+                            <PinItem name="Main Components" details={[
+                                "IR LED (Transmitter): Sends infrared light.",
+                                "IR Receiver: Receives reflected IR light.",
+                                "Comparator IC (Usually LM393): Converts analog signal to digital (0 or 1).",
+                                "Potentiometer: Adjusts sensitivity (distance range)."
+                            ]} />
+                        </ContentSection>
 
-                </div>
-            </motion.div>
+                        <ContentSection title="4. Pin Explanation">
+                            <PinItem name="3-Pin Module (Common)" details={[
+                                "VCC: Power supply (3.3V or 5V)",
+                                "GND: Ground (Connected to microcontroller ground)",
+                                "OUT: Output signal (HIGH or LOW). Changes state when object detected."
+                            ]} />
+                            <PinItem name="4-Pin Module (Optional)" details={[
+                                "VCC: Power",
+                                "GND: Ground",
+                                "DO (Digital Output): HIGH or LOW",
+                                "AO (Analog Output): Gives variable voltage depending on distance"
+                            ]} />
+                        </ContentSection>
 
-            {/* Right Side: Local Interactive 3D Viewer */}
+                    </div>
+                </motion.div>
+            )}
+
+            {isMobile && !isContentVisible && (
+                <button
+                    onClick={() => setIsContentVisible(true)}
+                    style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        left: '1rem',
+                        zIndex: 30,
+                        background: 'rgba(5,5,5,0.8)',
+                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                        color: '#ef4444',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '2rem',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '0.8rem',
+                        backdropFilter: 'blur(10px)'
+                    }}
+                >
+                    INFO
+                </button>
+            )}
+
+            {/* Right Side: Local Interactive 3D Viewer - Always Rendered */}
             <div style={{ flex: 1, position: 'relative', background: '#050505' }}>
                 <Canvas camera={{ position: [5, 5, 5], fov: 45 }}>
                     <ambientLight intensity={1} />
@@ -200,7 +250,6 @@ export const IrSensorLesson = () => {
                     background: 'rgba(5,5,5,0.7)',
                     padding: '1.2rem 2rem',
                     borderRadius: '4px',
-                    backdropFilter: 'blur(15px)',
                     border: '1px solid rgba(239, 68, 68, 0.2)',
                     boxShadow: '0 0 30px rgba(239, 68, 68, 0.1)'
                 }}>
