@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { ScrollControls, Scroll, useScroll, Float, Environment, Grid } from '@react-three/drei';
 import { Robot } from './Robot';
@@ -13,11 +13,13 @@ const SceneContent = () => {
     const isMobile = useIsMobile();
     const robotGroup = useRef<THREE.Group>(null!);
 
+    // Reusable vector to avoid GC stutter
+    const targetPos = useMemo(() => new THREE.Vector3(0, 0, 5), []);
+
     useFrame((state, delta) => {
+        // Reset vector each frame
+        targetPos.set(0, 0, 5);
 
-
-        // Define keyframes for camera
-        const targetPos = new THREE.Vector3(0, 0, 5);
         let targetRotY = 0; // Default: facing forward
 
         const PAGE_COUNT = isMobile ? 7 : 6;
@@ -151,7 +153,7 @@ export const Experience = () => {
         // 1. dpr limited to 1.5 (Avoids 4K rendering on retina/4k screens which kills FPS)
         // 2. No shadows prop = WebGL renderer doesn't allocate shadow maps
         // 3. performance prop for automatic regression (Drei)
-        <Canvas dpr={[1, 1.5]} performance={{ min: 0.5 }} camera={{ position: [0, 0, 5], fov: 35 }}>
+        <Canvas dpr={[1, 1.2]} performance={{ min: 0.5 }} camera={{ position: [0, 0, 5], fov: 35 }}>
             <ScrollControls pages={isMobile ? 7 : 6} damping={0.2}>
                 <SceneContent />
                 <Scroll html style={{ width: '100%', height: '100%' }}>

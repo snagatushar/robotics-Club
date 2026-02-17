@@ -107,7 +107,7 @@ export const IrSensorLesson = () => {
                     <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
                         Infrared Obstacle Avoidance Sensor Module
                     </p>
-                    <a style={{ color: 'red' }} href="https://youtu.be/A5CB4t9sukM?si=NK61AxGqH7yhq7G4">IR SensorExplanation Video</a>
+                    <a style={{ color: 'red' }} href="https://youtu.be/3-V8VNHJgFY?si=Ykie9DF9YSnIvDsE">IR SensorExplanation Video</a>
                 </div>
 
                 {/* Scrollable Content */}
